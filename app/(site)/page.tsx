@@ -1,8 +1,7 @@
-import './globals.css';
 export default function Home() {
   return (
     <div className='text-green-500'>
-      hello spotify
+      Main content
     </div>
   );
 }
