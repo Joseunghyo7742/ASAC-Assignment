@@ -5,6 +5,7 @@ import { HiHome } from 'react-icons/hi';
 import { BiSearch } from 'react-icons/bi';
 import Box from './Box';
 import SidebarItem from './SidebarItem';
+import Library from './Library';
 
 interface SidebarProps {
   children: React.ReactNode;
@@ -29,7 +30,6 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
     ],
     [pathname],
   );
-
   return (
     <div className="flex h-full">
       {/*md:flex- medium scrrens it's not going to be hidden, md크기 이상일 때 flex 해당요소가 플박 레이아웃으로 표시 */}
@@ -41,8 +41,11 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
             ))}
           </div>
         </Box>
-        <Box className="h-full overflow-y-auto">Song Library</Box>
+        <Box className="h-full overflow-y-auto">
+          <Library />
+        </Box>
       </div>
+      <main className="flex-1 h-full py-2 overflow-y-auto">{children}</main>
     </div>
   );
 };
