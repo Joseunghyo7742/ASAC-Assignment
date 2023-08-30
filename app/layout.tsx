@@ -15,8 +15,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={font.className}>
-        <ModalProvider/>
-        <Sidebar>{children} </Sidebar>
+          <ModalProvider/>
+          <Sidebar>{children} </Sidebar>
       </body>
     </html>
   );
