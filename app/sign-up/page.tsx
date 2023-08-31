@@ -3,12 +3,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { Typography, TextField, Button } from '@mui/material';
 
-interface SignUpFormState {
-  email: string;
-  password: string;
-}
-
-const page: React.FC<SignUpFormState> = () => {
+const page = () => {
   useEffect(() => console.log('Rendered'));
 
   const [email, setEmail] = useState('');
