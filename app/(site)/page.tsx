@@ -20,7 +20,7 @@ export default function Home() {
           </h1>
         </div>
         <div>
-          List of songs
+        ]
         </div>
       </div>
     </div>
