@@ -6,44 +6,42 @@ import { Typography, TextField, Button } from '@mui/material';
 interface SignUpFormState {
   email: string;
   password: string;
-  checkPw: string;
 }
 
 const page: React.FC<SignUpFormState> = () => {
   useEffect(() => console.log('Rendered'));
 
-  const [formData, setFormData] = useState<SignUpFormState>({
-    email: '',
-    password: '',
-    checkPw: '',
-  });
+  const [email, setEmail]= useState('');
+  const [password, setPassword] = useState('');
+  const [check_pw, setCheckPw] = useState('');
 
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const checkPwRef = useRef<HTMLInputElement>(null);
+  
   //유효성 검증
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    emailRef && console.log(emailRef);
-    const { name, value } = e.target;
-    if (name === 'email') {
-      const isValidEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,2}$/;
-      if (!isValidEmail) {
-        emailRef.current && emailRef.current.focus();
-      }
-    } else if (name == 'password') {
-      //8자 이상 + 특수문자 1개 이상 + 영문 소문자 최소 1개 + 영문 대문자 최소 1개
-      const isValidPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{8,}$/;
-      if (!isValidPassword) {
-        passwordRef.current && passwordRef.current.focus();
-      }
+  let isValidEmail = (/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}$/).test(email);
+  let isValidPassword=(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{8,}$/).test(password);
+  
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) =>{
+    const {name, value} = e.target;
+    if(name=== 'email'){
+      setEmail(value)
     }
-  };
+    else if(name==='password'){
+      setPassword(value)
+    }
+    else if(name==="check_pw"){
+      setCheckPw(value)
+    }
+  }
+  
   return (
     <div className="px-5 pt-3 h-[50%] w-[70%] border border-neutral-700  rounded-md bg-white ">
       <Typography className="text-neutral-800 heading" variant="h4">
         Welcome!
       </Typography>
-      <form>
+      <form >
         <TextField
           required
           id="outlined-required "
@@ -52,8 +50,10 @@ const page: React.FC<SignUpFormState> = () => {
           placeholder="seunghyoJo@example.com"
           fullWidth
           margin="normal"
+          onChange= {handleInputChange}
           inputRef={emailRef}
-          onChange={handleInputChange}
+          error={!isValidEmail}
+          helperText={isValidEmail? "":"이메일 형식에 맞춰주세요."}
         />
         <TextField
           id="outlined-password-input"
@@ -63,6 +63,11 @@ const page: React.FC<SignUpFormState> = () => {
           autoComplete="current-password"
           fullWidth
           margin="normal"
+          onChange={handleInputChange}
+          inputRef={passwordRef}
+          error={!isValidPassword}
+          helperText=
+          {isValidPassword? '':"8자 이상, 특수문자 1개 이상, 영문 대소문자 1개 이상 포함"} 
         />
         <TextField
           id="outlined-password-input"
@@ -72,8 +77,12 @@ const page: React.FC<SignUpFormState> = () => {
           autoComplete="current-password"
           fullWidth
           margin="normal"
+          onChange={handleInputChange}
+          error={!isValidPassword||password!==check_pw}
+          helperText={isValidPassword? '':"비밀번호를 한번 더 입력해주세요."}
+          inputRef={checkPwRef}
         />
-        <Button type="submit" variant="contained" color="success">
+        <Button type="submit" variant="contained" color="success" >
           Sign Up
         </Button>
       </form>

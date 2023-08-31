@@ -15,11 +15,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={font.className}>
         
-          <ModalProvider/>
-          <Sidebar>
-              {children}
-          </Sidebar>
-        
+            <Sidebar>
+                {children}
+            </Sidebar>
+          
           
       </body>
     </html>
