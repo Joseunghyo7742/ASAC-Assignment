@@ -23,6 +23,7 @@ const page: React.FC<SignUpFormState> = () => {
   let isValidEmail = (/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}$/).test(email);
   let isValidPassword=(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{8,}$/).test(password);
   
+  
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) =>{
     const {name, value} = e.target;
     if(name=== 'email'){
@@ -35,13 +36,30 @@ const page: React.FC<SignUpFormState> = () => {
       setCheckPw(value)
     }
   }
+
+  const onSubmit=(e: React.FormEvent<HTMLFormElement>)=>{
+    e.preventDefault();
+    if(isValidEmail && isValidPassword && password===check_pw){
+      console.log(`save email as ${email}`)
+      console.log(`save password as ${password}`)
+    }
+    else{
+        if (!isValidEmail) {
+          emailRef.current?.focus();
+        } else if (!isValidPassword) {
+          passwordRef.current?.focus();
+        } else {
+          checkPwRef.current?.focus();
+        }
+    }
+  }
   
   return (
-    <div className="px-5 pt-3 h-[50%] w-[70%] border border-neutral-700  rounded-md bg-white ">
+    <div className="px-5 pt-3 h-[70%] w-[70%] border border-neutral-700  rounded-md bg-white ">
       <Typography className="text-neutral-800 heading" variant="h4">
         Welcome!
       </Typography>
-      <form >
+      <form onSubmit={onSubmit}>
         <TextField
           required
           id="outlined-required "
