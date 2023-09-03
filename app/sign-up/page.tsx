@@ -1,10 +1,11 @@
 'use client';
-
 import { useEffect, useState, useRef } from 'react';
 import { Typography, TextField, Button } from '@mui/material';
+import { useModalDispatch, useModalState } from '@/components/ModalProvider';
+import Modal from '@/components/Modal';
 
 const page = () => {
-  useEffect(() => console.log('Rendered'));
+  //useEffect(() => console.log('Rendered'));
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -14,11 +15,15 @@ const page = () => {
   const passwordRef = useRef<HTMLInputElement>(null);
   const checkPwRef = useRef<HTMLInputElement>(null);
 
+  const dispatch = useModalDispatch();
+  const state = useModalState();
+
   //유효성 검증
   let isValidEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}$/.test(email);
   let isValidPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{8,}$/.test(password);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
     const { name, value } = e.target;
     if (name === 'email') {
       setEmail(value);
@@ -29,20 +34,31 @@ const page = () => {
     }
   };
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    let modalTitle = '';
+    let modalMessage = '';
     if (isValidEmail && isValidPassword && password === check_pw) {
       console.log(`save email as ${email}`);
       console.log(`save password as ${password}`);
+    } else if (!isValidEmail) {
+      emailRef.current?.focus();
+      modalTitle = 'Email Error';
+      modalMessage = 'Invalid Email formation. Check it again!';
+    } else if (!isValidPassword) {
+      passwordRef.current?.focus();
+      modalTitle = 'Password Error';
+      modalMessage = 'Invalid pssword formtion. Check it again!';
     } else {
-      if (!isValidEmail) {
-        emailRef.current?.focus();
-      } else if (!isValidPassword) {
-        passwordRef.current?.focus();
-      } else {
-        checkPwRef.current?.focus();
-      }
+      checkPwRef.current?.focus();
+      modalTitle = 'Password miss matched';
+      modalMessage = 'Confirm password again';
     }
+    dispatch({
+      type: 'OPEN_MODAL',
+      payload: { title: modalTitle, message: modalMessage },
+    });
+      state.modalRef.current?.showModal();
   };
 
   return (
@@ -50,9 +66,8 @@ const page = () => {
       <Typography className="text-neutral-800 heading" variant="h4">
         Welcome!
       </Typography>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={handleSubmit}>
         <TextField
-          required
           id="outlined-required "
           name="email"
           label="Email"

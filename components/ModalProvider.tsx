@@ -1,138 +1,68 @@
-// 'use client'
+"use client";
+import React, { useReducer, useContext, createContext, Dispatch, useRef } from 'react';
+import Modal from '@/components/Modal';
 
-// import ModalProvider, {
-//   ModalContext,
-// } from '@/app/2-global-state/modal-provider'
-// import { useContext } from 'react'
-// import { useRouter } from 'next/navigation'
+//상태를 위한 타입
+type ModalState = {
+  title: string;
+  message: string;
+  modalRef: React.MutableRefObject<HTMLDialogElement | null>;
+};
+//모든 액션들을 위한 타입
+export type ModalActionsType = 'OPEN_MODAL' | 'CLOSE_MODAL';
+export type ModalActions = { type: ModalActionsType; payload?: any };
 
-// const NestedReactComponent = () => {
-//   const { show, hide } = useContext(ModalContext)
-//   const router = useRouter()
-//   return (
-//     <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-//       <button
-//         onClick={() =>
-//           show({
-//             title: '안녕',
-//             description: '세상',
-//             confirmButton: '화화확인',
-//             cancelButton: '취취취소',
-//             confirmCallback: () => {
-//               router.push('/')
-//             },
-//             useCancelButton: false,
-//           })
-//         }
-//       >
-//         켜기 A
-//       </button>
-//       <button onClick={() => show({ title: 'Hello', description: 'World' })}>
-//         켜기 B
-//       </button>
-//       <button
-//         onClick={() =>
-//           show({ title: '----', description: 'ㅁㄴㅇㅁ너ㅏㅗ어ㅏ' })
-//         }
-//       >
-//         켜기 C
-//       </button>
-//       <button
-//         onClick={() =>
-//           show({ title: '129ㅗㄷㅁㅈ', description: 'ㅁㄴ우ㅏㅣㅁ누ㅏㅣ' })
-//         }
-//       >
-//         켜기 D
-//       </button>
-//       <button onClick={() => hide()}>끄기</button>
-//     </div>
-//   )
-// }
+//디스패치를 위한 타입
+export type ModalDispatch = Dispatch<ModalActions>;
 
-// export default function GlobalState() {
-//   const { show, hide } = useContext(ModalContext)
-//   return (
-//     <main>
-//       {/* <button onClick={() => show()}>켜기</button> */}
-//       {/* <button onClick={() => hide()}>끄기</button> */}
-//       <ModalProvider>
-//         <NestedReactComponent />
-//       </ModalProvider>
-//     </main>
-//   )
-// }
+//Context생성
+//추후 hooks함수가 반환하는 값이 유효하지않으면 에러를 발생시키도록 하기 위해 null체킹
+const ModalStateContext = createContext<ModalState | null>(null);
+const ModalDispatchContext = createContext<ModalDispatch | null>(null);
 
-// // const title = 'Text in a modal'
-// // const description =
-// //   'Duis mollis, est non commodo luctus, nisi erat porttitor ligula.'
-// import { Box, Button, Modal, Typography } from '@mui/material'
-// import { createContext, useState } from 'react'
+function ModalReducer(state: ModalState, action: ModalActions): ModalState {
+  console.log(action.type);
+  switch (action.type) {
+    case 'OPEN_MODAL':
+      return {
+        ...state,
+        title: action.payload.title,
+        message: action.payload.message,
+      };
+    case 'CLOSE_MODAL':
+      return {
+        ...state,
+        title: '',
+        message: '',
+      };
+    default:
+      throw new Error('Unhandled action');
+  }
+}
 
-// // Default Value
-// export const ModalContext = createContext({
-//   show: (param: ModalContent) => {},
-//   hide: () => {},
-// })
+export function ModalProvider({ children }: { children: React.ReactNode }) {
+  const initialModalState: ModalState = {
+    title: '',
+    message: '',
+    modalRef: useRef<HTMLDialogElement | null>(null),
+  };
+  const [modalState, modalDispatch] = useReducer(ModalReducer, initialModalState);
+  return (
+    <ModalDispatchContext.Provider value={modalDispatch}>
+      <ModalStateContext.Provider value={modalState}>
+        {children}
+      </ModalStateContext.Provider>
+    </ModalDispatchContext.Provider>
+  );
+}
 
-// interface ModalProviderProps {
-//   children: React.ReactNode
-// }
-
-// interface Modal extends ModalContent {
-//   show: boolean
-// }
-
-// interface ModalContent {
-//   title?: string
-//   description?: string
-//   confirmButton?: string
-//   cancelButton?: string
-//   confirmCallback?: () => void
-//   cancelCallback?: () => void
-//   useConfirmButton?: boolean
-//   useCancelButton?: boolean
-// }
-// export default function ModalProvider({ children }: ModalProviderProps) {
-//   const [modal, setModal] = useState<Modal>({
-//     show: false,
-//   })
-//   return (
-//     // Initial Value
-//     <ModalContext.Provider
-//       value={{
-//         show: (param: ModalContent) => {
-//           setModal({
-//             show: true,
-//             title: param.title,
-//             description: param.description,
-//             confirmButton: param.confirmButton,
-//             cancelButton: param.cancelButton,
-//             confirmCallback: param.confirmCallback,
-//             cancelCallback: param.cancelCallback,
-//             useConfirmButton: param.useConfirmButton ?? true,
-//             useCancelButton: param.useCancelButton ?? true,
-//           })
-//         },
-//         hide: () => {
-//           setModal({ show: false })
-//         },
-//       }}
-//     >
-//       {children}
-//       <Modal
-//         open={modal.show}
-//         onClose={() => setModal({ show: false })}
-//         sx={{
-//           position: 'fixed',
-//           top: '50px',
-//           left: '50px',
-//           width: '300px',
-//           minHeight: '100px',
-//           backgroundColor: 'white',
-//         }}
-//       >
-//         ....
-//       </Modal>
-//     </ModalContext.Provider>
-//   )
-// }
+export function useModalState() {
+  const state = useContext(ModalStateContext);
+  if (!state) throw new Error('Cannot find Modal Provider');
+  return state;
+}
+export function useModalDispatch() {
+  const dispatch = useContext(ModalDispatchContext);
+  if (!dispatch) throw new Error('Cannot find ModalProvider');
+  return dispatch;
+}
