@@ -4,7 +4,6 @@ import type { Metadata } from 'next';
 import { Figtree } from 'next/font/google';
 import { ModalProvider } from '@/components/ModalProvider';
 const font = Figtree({ subsets: ['latin'] });
-import Modal from '@/components/Modal';
 
 export const metadata: Metadata = {
   title: 'Spotify Clone',

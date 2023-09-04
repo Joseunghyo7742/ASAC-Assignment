@@ -38,34 +38,41 @@ const page = () => {
     console.log('Form errors', errors);
   };
   return (
-    <div>
-      <h1>Log In Form</h1>
-      <form onSubmit={handleSubmit(onSubmit, onError)} noValidate>
-        <label>Email</label>
-        <input
-          placeholder="test@email.com"
-          {...register('userEmail', {
-            required: '이메일은 필수 입력입니다.',
-            pattern: {
-              value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}$/,
-              message: '이메일 형식에 맞지 않습니다.',
-            },
-          })}
-        />
-        <label>Password</label>
-        <input
-          type="password"
-          {...register('userPassword', {
-            required: '비밀번호 입력은 필수입니다.',
-            pattern: {
-              value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{8,}$/,
-              message: '비밀번호 형식에 맞지 않습니다.',
-            },
-          })}
-        />
-        <button type="submit">로그인</button>
-      </form>
+    <div className="flex items-center justify-center w-full h-full ">
+      <div className=" w-[40%]  flex flex-col items-center gap-3 px-3 py-4 rounded-md bg-neutral-900">
+        <h1 className="text-2xl font-bold">Log in</h1>
+        <form className="flex flex-col w-full gap-1 px-20 " 
+        onSubmit={handleSubmit(onSubmit, onError)} noValidate>
+          <label className="text-sm font-semibold ">Email</label>
+          <input
+            className="px-2 py-0.5 mb-2"
+            placeholder="test@email.com"
+            {...register('userEmail', {
+              required: '이메일은 필수 입력입니다.',
+              pattern: {
+                value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}$/,
+                message: '이메일 형식에 맞지 않습니다.',
+              },
+            })}
+          />
+          <label className="text-sm font-semibold">Password</label>
+          <input
+            className="px-2 py-0.5 mb-3"
+            type="password"
+            {...register('userPassword', {
+              required: '비밀번호 입력은 필수입니다.',
+              pattern: {
+                value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{8,}$/,
+                message: '비밀번호 형식에 맞지 않습니다.',
+              },
+            })}
+          />
+          <button className=" w-[80%] py-3 font-bold text-black transition bg-green-500 border border-transparent rounded-full self-center mg-px-3 disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-75" type="submit">로그인</button>
+          </form>
+      </div>
     </div>
+
+   
   );
 };
 
