@@ -29,11 +29,11 @@ const page = () => {
   };
   //Form에서 에러가 났을 때 실행되는 함수.
   const onError = (errors: FieldErrors<FormData>) => {
-    console.log(typeof(errors))
-    const errorMessage= errors.userEmail?.message || errors.userPassword?.message;
+    const errorMessage= Object.values(errors)[0]
+    console.log("value",errorMessage);
     dispatch({
       type: 'OPEN_MODAL',
-      payload: { title: '로그인 오류', message: errorMessage}});
+      payload: { title: '로그인 오류', message: errorMessage.message}});
     state.modalRef.current?.showModal();
     console.log('Form errors', errors);
   };

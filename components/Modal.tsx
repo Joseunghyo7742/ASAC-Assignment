@@ -16,6 +16,7 @@ const Modal = forwardRef((_, ref: ForwardedRef<HTMLDialogElement>) => {
     <dialog ref={ref} className="border border-1">
       <div className="flex flex-col gap-2 p-4">
         <span className="text-lg">{state.title.toUpperCase()}</span>
+        <span >{state.message}</span>
         
         <div className="flex justify-end gap-4 text-base">
           <button

@@ -51,6 +51,7 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
     <ModalDispatchContext.Provider value={modalDispatch}>
       <ModalStateContext.Provider value={modalState}>
         {children}
+        <Modal ref= {initialModalState.modalRef}/>
       </ModalStateContext.Provider>
     </ModalDispatchContext.Provider>
   );
