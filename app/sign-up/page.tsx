@@ -4,8 +4,8 @@ import { Typography, TextField, Button } from '@mui/material';
 import { useModalDispatch, useModalState } from '@/components/ModalProvider';
 
 const page = () => {
-  //useEffect(() => console.log('Rendered'));
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [check_pw, setCheckPw] = useState('');
@@ -18,8 +18,8 @@ const page = () => {
   const state = useModalState();
 
   //유효성 검증
-  let isValidEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}$/.test(email);
-  let isValidPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{8,}$/.test(password);
+  const isValidEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}$/.test(email);
+  const isValidPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{8,}$/.test(password);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
