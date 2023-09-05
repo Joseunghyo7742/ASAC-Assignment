@@ -1,8 +1,7 @@
 'use client';
-import { useEffect, useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { Typography, TextField, Button } from '@mui/material';
 import { useModalDispatch, useModalState } from '@/components/ModalProvider';
-import Modal from '@/components/Modal';
 
 const page = () => {
   //useEffect(() => console.log('Rendered'));

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import React, { useReducer, useContext, createContext, Dispatch, useRef } from 'react';
 import Modal from '@/components/Modal';
 
@@ -8,17 +8,10 @@ type ModalState = {
   message: string;
   modalRef: React.MutableRefObject<HTMLDialogElement | null>;
 };
-//모든 액션들을 위한 타입
+//모든 액션& 디스패치를 위한 타입
 export type ModalActionsType = 'OPEN_MODAL' | 'CLOSE_MODAL';
 export type ModalActions = { type: ModalActionsType; payload?: any };
-
-//디스패치를 위한 타입
 export type ModalDispatch = Dispatch<ModalActions>;
-
-//Context생성
-//추후 hooks함수가 반환하는 값이 유효하지않으면 에러를 발생시키도록 하기 위해 null체킹
-const ModalStateContext = createContext<ModalState | null>(null);
-const ModalDispatchContext = createContext<ModalDispatch | null>(null);
 
 function ModalReducer(state: ModalState, action: ModalActions): ModalState {
   console.log(action.type);
@@ -39,19 +32,26 @@ function ModalReducer(state: ModalState, action: ModalActions): ModalState {
       throw new Error('Unhandled action');
   }
 }
+//Context생성
+//추후 hooks함수가 반환하는 값이 유효하지않으면 에러를 발생시키도록 하기 위해 null체킹
+const ModalStateContext = createContext<ModalState | null>(null);
+const ModalDispatchContext = createContext<ModalDispatch | null>(null);
 
 export function ModalProvider({ children }: { children: React.ReactNode }) {
+  const modalRef = useRef<HTMLDialogElement | null>(null);
   const initialModalState: ModalState = {
     title: '',
     message: '',
-    modalRef: useRef<HTMLDialogElement | null>(null),
+    modalRef: modalRef,
   };
-  const [modalState, modalDispatch] = useReducer(ModalReducer, initialModalState);
+  //state: 우리가 앞으로 컴포넌트에서 사용 할 수 있는 상태
+  //dispatch: 액션을 발생시키는 함수.
+  const [state, dispatch] = useReducer(ModalReducer, initialModalState);
   return (
-    <ModalDispatchContext.Provider value={modalDispatch}>
-      <ModalStateContext.Provider value={modalState}>
+    <ModalDispatchContext.Provider value={dispatch}>
+      <ModalStateContext.Provider value={state}>
         {children}
-        <Modal ref= {initialModalState.modalRef}/>
+        <Modal ref={modalRef} />
       </ModalStateContext.Provider>
     </ModalDispatchContext.Provider>
   );
