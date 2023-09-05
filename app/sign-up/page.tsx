@@ -3,6 +3,14 @@ import { useState, useRef } from 'react';
 import { Typography, TextField, Button } from '@mui/material';
 import { useModalDispatch, useModalState } from '@/components/ModalProvider';
 
+
+const SignUp_form_field=[
+  {
+    id:"field1"
+    name:
+  }
+]
+
 const page = () => {
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -10,10 +18,12 @@ const page = () => {
   const [password, setPassword] = useState('');
   const [check_pw, setCheckPw] = useState('');
 
-  const emailRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
-  const checkPwRef = useRef<HTMLInputElement>(null);
-
+  // const emailRef = useRef<HTMLInputElement>(null);
+  // const passwordRef = useRef<HTMLInputElement>(null);
+  // const checkPwRef = useRef<HTMLInputElement>(null);
+  const formInfo=[email,password,check_pw];
+  const  formRef=useRef<null[] | HTMLDivElement[]>([]);
+  
   const dispatch = useModalDispatch();
   const state = useModalState();
 
@@ -66,6 +76,9 @@ const page = () => {
         Welcome!
       </Typography>
       <form onSubmit={handleSubmit}>
+      {formInfo.map((item, index)=>(
+        
+      ))}
         <TextField
           id="outlined-required "
           name="email"
