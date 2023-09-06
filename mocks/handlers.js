@@ -1,35 +1,25 @@
 import { rest } from 'msw'
+import { FEATURED_PLAYLISTS_DATA } from './data/featured-playlists-data'
 export const handlers = [
-  rest.post('/login', (req, res, ctx) => {
-    // Persist user's authentication in the session
-    sessionStorage.setItem('is-authenticated', 'true')
-
-    return res(
-      // Respond with a 200 status code
-      ctx.status(200),
-    )
-  }),
-
-  rest.get('/user', (req, res, ctx) => {
-    // Check if the user is authenticated in this session
-    const isAuthenticated = sessionStorage.getItem('is-authenticated')
-
-    if (!isAuthenticated) {
-      // If not authenticated, respond with a 403 error
-      return res(
-        ctx.status(403),
-        ctx.json({
-          errorMessage: 'Not authorized',
-        }),
-      )
-    }
-
-    // If authenticated, return a mocked user details
-    return res(
-      ctx.status(200),
-      ctx.json({
-        username: 'admin',
-      }),
-    )
-  }),
+  // rest.get("https://jsonplaceholder.typicode.com/todos"),(req, res, ctx)=>{
+  //   //이 경로로 API가 호출됐을 때,가로채서 목데이터를 응답해줄 것임
+  //   return res(ctx.status(200),//http status code 넘기기
+  //   //500으로 처리하면 모든 요청이 서버에러로 처리
+  //     ctx.json([ //돌려줄 응답값
+  //       {
+  //         id:1,
+  //         title:"청소",
+  //         completed:true,
+  //       },
+  //       {
+  //         id:2,
+  //         title:"설거지",
+  //         completed: true,
+  //       }
+  //     ])) 
+  // }
+  rest.get("https://seungpotify/featured-playlists",(req,res,ctx)=>{
+    return res(ctx.status(200),
+    ctx.json(FEATURED_PLAYLISTS_DATA))
+  })
 ]
