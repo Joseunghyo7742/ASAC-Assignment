@@ -9,7 +9,7 @@ const Signup_Form_Field = [
     name: 'email',
     label: 'Email',
     placeholder: 'user@example.com',
-    pattern: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,3}$/,
+    pattern:  "([!#-'*+/-9=?A-Z^-~-]+(.[!#-'*+/-9=?A-Z^-~-]+)*|\"([]!#-[^-~ \t]|(\\[\t -~]))+\")@([!#-'*+/-9=?A-Z^-~-]+(.[!#-'*+/-9=?A-Z^-~-]+)*|[[\t -Z^-~]*])",
     errorTitle: 'Check Email',
     errorMessage: 'Invalid email format or empty',
   },
@@ -66,7 +66,7 @@ const page = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const invalidField = inputTarget.current?.filter(
-      (reference) => reference?.value === '' || !reference?.validity.valid,
+      (reference) =>!reference?.validity.valid|| reference?.value === '' ,
     );
     console.log(invalidField);
 
