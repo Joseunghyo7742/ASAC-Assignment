@@ -60,8 +60,10 @@ const page = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const invalidField = inputTarget.current?.filter((reference)=>!reference?.validity.valid);
-    //inputTarget.current => object타입 
+    const invalidField = inputTarget.current?.filter((reference:HTMLInputElement)=>!reference?.validity.valid);
+    
+    console.log(invalidField) 
+    
     // if (invalidField) {
     //   // 패턴이 유효하지 않은 입력 필드에 포커스 주기
     //   invalidField.focus();

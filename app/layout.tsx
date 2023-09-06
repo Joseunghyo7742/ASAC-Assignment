@@ -3,6 +3,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Figtree } from 'next/font/google';
 import { ModalProvider } from '@/components/ModalProvider';
+import { MSWComponent } from '@/mocks/MSWComponent';
 const font = Figtree({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -14,9 +15,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={font.className}>
-        <ModalProvider>
-          <Sidebar>{children}</Sidebar>
-        </ModalProvider>
+        <MSWComponent>
+          <ModalProvider>
+            <Sidebar>{children}</Sidebar>
+          </ModalProvider>
+        </MSWComponent>
+        
       </body>
     </html>
   );
