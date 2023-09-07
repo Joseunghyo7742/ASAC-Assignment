@@ -8,8 +8,9 @@ const Signup_Form_Field = [
     id: 'field1',
     name: 'email',
     label: 'Email',
+    type:'email',
     placeholder: 'user@example.com',
-    pattern:  "([!#-'*+/-9=?A-Z^-~-]+(.[!#-'*+/-9=?A-Z^-~-]+)*|\"([]!#-[^-~ \t]|(\\[\t -~]))+\")@([!#-'*+/-9=?A-Z^-~-]+(.[!#-'*+/-9=?A-Z^-~-]+)*|[[\t -Z^-~]*])",
+    pattern:  "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$",
     errorTitle: 'Check Email',
     errorMessage: 'Invalid email format or empty',
   },
@@ -20,7 +21,7 @@ const Signup_Form_Field = [
     label: 'Password',
     placeholder: 'Password',
     pattern:
-      "([!#-'*+/-9=?A-Z^-~-]+(.[!#-'*+/-9=?A-Z^-~-]+)*|\"([]!#-[^-~ \t]|(\\[\t -~]))+\")@([!#-'*+/-9=?A-Z^-~-]+(.[!#-'*+/-9=?A-Z^-~-]+)*|[[\t -Z^-~]*])",
+      "^.*(?=^.{8,}$)(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%*^&+=]).*$",
     errorTitle: 'Check Password',
     errorMessage: 'Invalid password format or empty',
   },
@@ -31,7 +32,7 @@ const Signup_Form_Field = [
     label: 'confirm_password',
     placeholder: 'type your password again',
     pattern:
-      '^(?=.*[!@#\\$%\\^&\\*\\(\\)\\-\\+=\\{\\}\\[\\]\\|;:\'",.<>?\\/`~a-z])(?=.*[A-Z]).{8,}$',
+      '^.*(?=^.{8,}$)(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%*^&+=]).*$',
     errorTitle: 'Check Password',
     errorMessage: 'Password is unmatched!',
   },
@@ -65,9 +66,12 @@ const page = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const invalidField = inputTarget.current?.filter(
-      (reference) =>!reference?.validity.valid|| reference?.value === '' ,
-    );
+
+    const invalidField = inputTarget.current?.filter((reference) => {
+      console.log("reference",reference?.value)
+      console.log(!reference?.validity.valid);
+      return !reference?.validity.valid || reference?.value === '';
+    });
     console.log(invalidField);
 
     //첫번째 오류부분만 모달을 띄운다! 나중에 다 띄우고싶다면 인덱스만 조작해주면 됨.

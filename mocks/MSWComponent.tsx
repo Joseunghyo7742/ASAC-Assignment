@@ -10,7 +10,7 @@ export const MSWComponent = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     const init = async () => {
       if (isMockingMode) {
-        const initMocks = await import('./index').then((res) => res.initMocks);
+        const initMocks = await import('./index').then((res) => res.initMocks); //dynamic import
         await initMocks();
         setMSWReady(true);
       }

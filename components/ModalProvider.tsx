@@ -22,6 +22,14 @@ function ModalReducer(state: ModalState, action: ModalActions): ModalState {
         ...state,
         title: action.payload.title,
         message: action.payload.message,
+        // events: {
+        //   close(){
+        //     state.modalRef.current.close()  
+        //   },
+        //   open: () => {
+
+        //   }
+        // }
       };
     case 'CLOSE_MODAL':
       return {
