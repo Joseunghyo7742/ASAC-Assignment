@@ -10,6 +10,7 @@ type ModalState = {
 };
 //모든 액션& 디스패치를 위한 타입
 export type ModalActionsType = 'OPEN_MODAL' | 'CLOSE_MODAL';
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ModalActions = { type: ModalActionsType; payload?: any };
 export type ModalDispatch = Dispatch<ModalActions>;
 
@@ -21,6 +22,14 @@ function ModalReducer(state: ModalState, action: ModalActions): ModalState {
         ...state,
         title: action.payload.title,
         message: action.payload.message,
+        // events: {
+        //   close(){
+        //     state.modalRef.current.close()  
+        //   },
+        //   open: () => {
+
+        //   }
+        // }
       };
     case 'CLOSE_MODAL':
       return {

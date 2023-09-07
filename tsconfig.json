@@ -77,7 +77,7 @@
       }
     ]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "mocks/handlers.js", "components/PlayList.tsx"],
   /* "files" 와 "include" 모두 지정되어 있지 않다면 컴파일러는 기본적으로 "exclude" 속성을 사용하여 제외된 것은 제외하고 모든 TypeScript (.ts,.d.ts 그리고 .tsx) 파일을 포함하는 디렉토리와 하위 디렉토리에 포함 */
   "exclude": ["node_modules"]
   /* "exclude" 속성에 디렉토리가 지정되지 있지 않다면 기본적으로 node_modules, bower_components, jspm_packages 그리고 <outDir>를 제외 */

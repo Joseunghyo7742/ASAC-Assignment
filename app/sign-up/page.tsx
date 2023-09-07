@@ -1,115 +1,128 @@
 'use client';
 import { useState, useRef } from 'react';
-import { Typography, TextField, Button } from '@mui/material';
+import { Typography, TextField } from '@mui/material';
 import { useModalDispatch, useModalState } from '@/components/ModalProvider';
 
+const Signup_Form_Field = [
+  {
+    id: 'field1',
+    name: 'email',
+    label: 'Email',
+    type: 'email',
+    placeholder: 'user@example.com',
+    pattern: '[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$',
+    errorTitle: 'Check Email',
+    errorMessage: 'Invalid email format or empty',
+  },
+  {
+    id: 'field2',
+    name: 'password',
+    type: 'password',
+    label: 'Password',
+    placeholder: 'Password',
+    pattern: '^.*(?=^.{8,}$)(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%*^&+=]).*$',
+    errorTitle: 'Check Password',
+    errorMessage: 'Invalid password format or empty',
+  },
+  {
+    id: 'field3',
+    name: 'confirm_password',
+    type: 'password',
+    label: 'confirm_password',
+    placeholder: 'type your password again',
+    pattern: '^.*(?=^.{8,}$)(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%*^&+=]).*$',
+    errorTitle: 'Check Password',
+    errorMessage: 'Password is unmatched!',
+  },
+];
+interface registerForm {
+  email: string;
+  password: string;
+  confirm_password: string;
+}
+const initialForm = {
+  email: '',
+  password: '',
+  confirm_password: '',
+};
+
 const page = () => {
-  //useEffect(() => console.log('Rendered'));
+  const [formValues, setFormValues] = useState<registerForm>(initialForm);
+  const inputTarget = useRef<(HTMLInputElement | null)[]>([]); //두가지타입이 한 배열에 공존
 
-  
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [check_pw, setCheckPw] = useState('');
-
-  const emailRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
-  const checkPwRef = useRef<HTMLInputElement>(null);
-
+  //const inputTarget =  useRef<HTMLInputElement[] | null[]>([]); //배열 자체에 둘 중 하나의 타입만
   const dispatch = useModalDispatch();
   const state = useModalState();
-
-  //유효성 검증
-  const isValidEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}$/.test(email);
-  const isValidPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{8,}$/.test(password);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const { name, value } = e.target;
-    if (name === 'email') {
-      setEmail(value);
-    } else if (name === 'password') {
-      setPassword(value);
-    } else if (name === 'check_pw') {
-      setCheckPw(value);
+    for (const element in formValues) {
+      if (element === name) setFormValues({ ...formValues, [name]: value });
     }
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    let modalTitle = '';
-    let modalMessage = '';
-    if (isValidEmail && isValidPassword && password === check_pw) {
-      console.log(`save email as ${email}`);
-      console.log(`save password as ${password}`);
-    } else if (!isValidEmail) {
-      emailRef.current?.focus();
-      modalTitle = 'Email Error';
-      modalMessage = 'Invalid Email formation. Check it again!';
-    } else if (!isValidPassword) {
-      passwordRef.current?.focus();
-      modalTitle = 'Password Error';
-      modalMessage = 'Invalid pssword formtion. Check it again!';
-    } else {
-      checkPwRef.current?.focus();
-      modalTitle = 'Password miss matched';
-      modalMessage = 'Confirm password again';
-    }
-    dispatch({
-      type: 'OPEN_MODAL',
-      payload: { title: modalTitle, message: modalMessage },
-    });
-      state.modalRef.current?.showModal();
-  };
 
+    const invalidField = inputTarget.current?.filter((reference) => {
+      console.log('reference', reference?.value);
+      console.log(!reference?.validity.valid);
+      return !reference?.validity.valid || reference?.value === '';
+    });
+    console.log(invalidField);
+
+    //첫번째 오류부분만 모달을 띄운다! 나중에 다 띄우고싶다면 인덱스만 조작해주면 됨.
+    if (invalidField[0]) {
+      invalidField[0].focus();
+      const invalidFieldName = invalidField[0].name;
+      console.log('invalidFieldIdName', invalidFieldName);
+      const matchingField = Signup_Form_Field.find((field) => field.name === invalidFieldName);
+      console.log('matchingField', matchingField);
+      // 패턴이 유효하지 않은 입력 필드에 포커스 주기
+      dispatch({
+        type: 'OPEN_MODAL',
+        payload: {
+          title: matchingField?.errorTitle,
+          message: matchingField?.errorMessage,
+        },
+      });
+      state.modalRef.current?.showModal();
+    } else {
+      console.log('userRegistered', formValues);
+    }
+  };
   return (
     <div className="px-5 pt-3 h-[70%] w-[70%] border border-neutral-700  rounded-md bg-white ">
       <Typography className="text-neutral-800 heading" variant="h4">
         Welcome!
       </Typography>
-      <form onSubmit={handleSubmit}>
-        <TextField
-          id="outlined-required "
-          name="email"
-          label="Email"
-          placeholder="seunghyoJo@example.com"
-          fullWidth
-          margin="normal"
-          onChange={handleInputChange}
-          inputRef={emailRef}
-          error={!isValidEmail}
-          helperText={isValidEmail ? '' : '이메일 형식에 맞춰주세요.'}
-        />
-        <TextField
-          id="outlined-password-input"
-          label="Password"
-          type="password"
-          name="password"
-          autoComplete="current-password"
-          fullWidth
-          margin="normal"
-          onChange={handleInputChange}
-          inputRef={passwordRef}
-          error={!isValidPassword}
-          helperText={
-            isValidPassword ? '' : '8자 이상, 특수문자 1개 이상, 영문 대소문자 1개 이상 포함'
-          }
-        />
-        <TextField
-          id="outlined-password-input"
-          label="Confirm password"
-          name="check_pw"
-          type="password"
-          autoComplete="current-password"
-          fullWidth
-          margin="normal"
-          onChange={handleInputChange}
-          error={!isValidPassword || password !== check_pw}
-          helperText={isValidPassword ? '' : '비밀번호를 한번 더 입력해주세요.'}
-          inputRef={checkPwRef}
-        />
-        <Button className="text-white bg-black hover:bg-emerald-800" type="submit" color="success">
+      <form onSubmit={handleSubmit} noValidate>
+        {Signup_Form_Field.map((item, index) => (
+          <TextField
+            key={item.id}
+            name={item.name}
+            label={item.label}
+            placeholder={item.placeholder}
+            onChange={handleInputChange}
+            //element는 현재 요소를 참조 즉 TextField
+            inputRef={(ref) => (inputTarget.current[index] = ref)}
+            margin="normal"
+            inputProps={{
+              pattern: item.pattern,
+              // errortitle: item.errorTitle,
+              // errormessage: item.errorMessage,
+              type: item.type || undefined,
+            }}
+            fullWidth
+          />
+        ))}
+        <button
+          className="w-[80%] py-3 font-bold text-black transition bg-green-500 border border-transparent rounded-full self-center mg-px-3  hover:opacity-75"
+          type="submit"
+        >
           Sign Up
-        </Button>
+        </button>
       </form>
     </div>
   );
