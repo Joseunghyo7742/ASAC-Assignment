@@ -5,16 +5,16 @@ import { twMerge } from 'tailwind-merge';
 import { RxCaretLeft } from 'react-icons/rx';
 import { RxCaretRight } from 'react-icons/rx';
 import { HiHome } from 'react-icons/hi';
-import {BiSearch} from 'react-icons/bi';
+import { BiSearch } from 'react-icons/bi';
 import Button from './Button';
-import Link from 'next/link';
+import useAuthModal from '@/hooks/useAuthModal';
 interface HeaderProps {
   children: React.ReactNode;
   className?: string;
 }
 const Header: React.FC<HeaderProps> = ({ children, className }) => {
   const router = useRouter();
-
+  const authModal = useAuthModal();
   const handleLogout = () => {
     //Handle logout
   };
@@ -42,7 +42,7 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
             <RxCaretRight className="text-white" size={35} />
           </button>
         </div>
-        
+
         {/*mobile visible*/}
         <div className="flex items-center md:hidden gap-x-2">
           <button className="flex items-center justify-center p-2 transition bg-white rounded-full hover:opacity-75">
@@ -56,19 +56,14 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
           <>
             <div>
               <Button
-                onClick={()=> {}}
-                className="font-medium bg-transparent text-neutral-300">
-                <Link href="/sign-up">Sign up</Link>
-              </Button>
+                onClick={authModal.onOpen}
+                className="font-medium bg-transparent text-neutral-300"
+              >Sign up</Button>
             </div>
             <div>
-              <Button 
-                onClick={()=> {}}
-                className="px-6 py-2 bg-white">
-                <Link href="/log-in">Log in</Link>
-              </Button>
+              <Button onClick={authModal.onOpen} className="px-6 py-2 bg-white">Log in</Button>
             </div>
-          </> 
+          </>
         </div>
       </div>
       {children}
