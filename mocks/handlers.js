@@ -1,5 +1,5 @@
-import { rest } from 'msw'
-import { FEATURED_PLAYLISTS_DATA } from './data/featured-playlists-data'
+import { rest } from 'msw';
+// import { FEATURED_PLAYLISTS_DATA } from './data/featured-playlists-data'
 export const handlers = [
   // rest.get("https://jsonplaceholder.typicode.com/todos"),(req, res, ctx)=>{
   //   //이 경로로 API가 호출됐을 때,가로채서 목데이터를 응답해줄 것임
@@ -16,10 +16,10 @@ export const handlers = [
   //         title:"설거지",
   //         completed: true,
   //       }
-  //     ])) 
+  //     ]))
   // }
-  rest.get("https://seungpotify/featured-playlists",(req,res,ctx)=>{
-    return res(ctx.status(200),
-    ctx.json(FEATURED_PLAYLISTS_DATA))
-  })
-]
+  // rest.get("https://seungpotify/featured-playlists",(req,res,ctx)=>{
+  //   return res(ctx.status(200),
+  //   ctx.json(FEATURED_PLAYLISTS_DATA))
+  // })
+];

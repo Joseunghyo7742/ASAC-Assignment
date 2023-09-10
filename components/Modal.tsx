@@ -9,7 +9,7 @@ const Modal = forwardRef((_, ref: ForwardedRef<HTMLDialogElement>) => {
   const state = useModalState(); //현재 모달 상태
   const handleClose = (e: React.UIEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    state.modalRef.current?.close();//state로 open하는 것보다 
+    state.modalRef.current?.close();
   };
   return (
     <dialog ref={ref} className="border rounded-md bg-neutral-800 border-1 ">

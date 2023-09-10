@@ -7,7 +7,7 @@ import { RxCaretRight } from 'react-icons/rx';
 import { HiHome } from 'react-icons/hi';
 import {BiSearch} from 'react-icons/bi';
 import Button from './Button';
-
+import Link from 'next/link';
 interface HeaderProps {
   children: React.ReactNode;
   className?: string;
@@ -58,14 +58,14 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
               <Button
                 onClick={()=> {}}
                 className="font-medium bg-transparent text-neutral-300">
-                Sign up
+                <Link href="/sign-up">Sign up</Link>
               </Button>
             </div>
             <div>
               <Button 
                 onClick={()=> {}}
                 className="px-6 py-2 bg-white">
-                Log in
+                <Link href="/log-in">Log in</Link>
               </Button>
             </div>
           </> 
