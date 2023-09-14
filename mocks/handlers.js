@@ -1,4 +1,4 @@
- import { rest } from 'msw'
+import { rest } from 'msw'
 // import { FEATURED_PLAYLISTS_DATA } from './data/featured-playlists-data'
 export const handlers = [
 //   // rest.get("https://jsonplaceholder.typicode.com/todos"),(req, res, ctx)=>{
