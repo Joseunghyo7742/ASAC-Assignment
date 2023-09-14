@@ -5,7 +5,8 @@ import axios from 'axios';
 import { TextField } from '@mui/material';
 
 const page = () => {
-  const [artistData, setArtistData] = useState(null);
+  const [searchInput, setSearchInput] = useState(null);
+  const [searchResult, setSearchResult] = useState(null);
   const [accessToken, setAccessToken] = useState('');
   const CLIENT_ID = 'fa2cfe7869ff48e5b6267e74c530c493';
   const CLIENT_SECRET = process.env.NEXT_PUBLIC_SP_CLIENT_SECRET;
@@ -21,25 +22,23 @@ const page = () => {
       .then((response) => {
         const data = response.data;
         setAccessToken(data.access_token);
-        console.log("access_token setted:",data.access_token); 
+        console.log('access_token setted:', data.access_token);
       })
       .catch((error) => console.log("Couldn't get Token", error));
   }, []);
 
-  //search artist
-  async function getArtistId(e: React.KeyboardEvent) {
-    if (e.key === 'Enter') {
-      try {
-        const response = await axios({
-          method: 'get',
-          url: 'https://api.spotify.com/v1/artists/06HL4z0CvFAxyc27GXpf02?si=a36d801854884b0a',
-          headers: {"Authorization": 'Bearer  '+  accessToken},
-        });
-        setArtistData(response);
-        console.log("get artist",response);
-      } catch (error) {
-        console.log('Could not get artist data', error);
-      }
+  //search
+  async function search() {
+    try {
+      const response = await axios({
+        method: 'get',
+        url: `https://api.spotify.com/v1/search?q=${searchInput}&type=track,artist,playlist,album`,
+        headers: { Authorization: 'Bearer  ' + accessToken },
+      });
+      setSearchResult(response);
+      console.log('get artist', response);
+    } catch (error) {
+      console.log('Could not get artist data', error);
     }
   }
 
@@ -51,8 +50,11 @@ const page = () => {
           id="standard-basic"
           variant="standard"
           onKeyDown={(e) => {
-            getArtistId(e);
+            if (e.key === 'Enter') {
+              search();
+            }
           }}
+          onChange={(e) => setSearchInput(e.target.value)}
         />
       </Header>
     </div>
