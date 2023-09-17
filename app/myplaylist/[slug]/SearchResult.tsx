@@ -1,11 +1,11 @@
 //parent component로부터 props로 데이터를 넘겨받자.
 import Image from 'next/image';
-import usePlaylistTrackContext from '@/app/create-playlist/PlaylistTrackProvider';
+import  * as PlaylistTrackProvider from '@/app/myplaylist/[slug]/PlaylistTrackProvider';
 //TODO: 타입 내부에 적기.
 
 const SearchResult = ({ searchResult }) => {
   const results = searchResult?.data.tracks.items;
-  const { playlistTracks, setPlaylistTracks } = usePlaylistTrackContext();
+  const { playlistTracks, setPlaylistTracks } = PlaylistTrackProvider.usePlaylistInfoContext();
 
   function addTrack(track) {
     if (playlistTracks.every((item) => item.id !== track.id)) {
@@ -21,8 +21,8 @@ const SearchResult = ({ searchResult }) => {
       ]);
     }
   }
-//TODO: search bar input 값 없을 때 아무것도 안띄우도록.
-//TODO: search component 통합.
+  //TODO: search bar input 값 없을 때 아무것도 안띄우도록.
+  //TODO: search component 통합.
   return (
     <>
       <article className="h-24">

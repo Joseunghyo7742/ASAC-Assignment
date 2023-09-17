@@ -1,32 +1,34 @@
 'use client';
 
-import usePlaylistTrackContext from '@/app/create-playlist/PlaylistTrackProvider';
+import {
+  usePlaylistInfoContext,
+  usePlaylistSlug,
+} from '@/app/myplaylist/[slug]/PlaylistTrackProvider';
 import Image from 'next/image';
-import { useState } from 'react';
 import firebaseDB from '@/app/firebase/firebasedb';
-import { collection, addDoc } from 'firebase/firestore';
+import { setDoc, doc } from 'firebase/firestore';
 import Button from '@/components/Button';
 
+//TODO: 저장하기 버튼 누를 필요없이 자동업데이트 되도록. Create는 Library +버튼으로 , 여기는 track read & update 하는 곳.
 const MyPlaylistTable = () => {
-  const [playlistName, setPlaylistName] = useState('');
+  const { playlistTracks, setPlaylistTracks, playlistName, setPlaylistName } =
+    usePlaylistInfoContext();
 
-  const { playlistTracks, setPlaylistTracks } = usePlaylistTrackContext();
-
+  const slug = usePlaylistSlug();
   function deleteTrack(track) {
     const nPlaylistTracks = playlistTracks.filter((items) => items.id !== track.id);
     setPlaylistTracks(nPlaylistTracks);
   }
 
-  async function createPlaylist() {
+  async function updatePlaylist() {
+    console.log('update function');
     try {
-      console.log('createPlaylist');
-      const docRef = await addDoc(collection(firebaseDB, 'playlists'),{
+      await setDoc(doc(firebaseDB, 'playlists', `${slug}`), {
         playlistName: playlistName,
         tracks: playlistTracks,
       });
-      console.log('Document written with ID:', docRef.id);
     } catch (e) {
-      console.error('error adding document', e);
+      console.log("couldn't update Playlist", e);
     }
   }
 
@@ -41,7 +43,7 @@ const MyPlaylistTable = () => {
           value={playlistName}
           onChange={(e) => setPlaylistName(e.target.value)}
         />
-        <Button className="px-2 py-1 text-xs text-bold w-30" onClick={createPlaylist}>
+        <Button className="px-2 py-1 text-xs text-bold w-30" onClick={updatePlaylist}>
           저장하기
         </Button>
       </div>
