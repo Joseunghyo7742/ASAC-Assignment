@@ -2,12 +2,16 @@
 import Header from '@/components/Header';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { TextField } from '@mui/material';
-import SearchResult from '@/app/search-page/SearchResult';
+import SearchResult from '@/app/create-playlist/SearchResult';
+import { PlaylistTrackProvider } from '@/app/create-playlist/PlaylistTrackProvider';
+import MyPlaylistTable from '@/app/create-playlist/MyPlaylistTable';
+
+
 
 const page = () => {
   const [searchResult, setSearchResult] = useState(null);
   const [accessToken, setAccessToken] = useState('');
+
   const CLIENT_ID = 'fa2cfe7869ff48e5b6267e74c530c493'; //env에 넣자
   const CLIENT_SECRET = process.env.NEXT_PUBLIC_SP_CLIENT_SECRET;
   useEffect(() => {
@@ -22,10 +26,9 @@ const page = () => {
       .then((response) => {
         const data = response.data;
         setAccessToken(data.access_token);
-        console.log('access_token setted:', data.access_token);
       })
       .catch((error) => console.log("Couldn't get Token", error));
-  }, []);
+  }, [CLIENT_ID, CLIENT_SECRET]);
 
   //search
   async function search(searchInput) {
@@ -43,19 +46,25 @@ const page = () => {
 
   return (
     <div className="w-full h-full overflow-hidden overflow-y-auto rounded-lg bg-neutral-900">
-      <Header>
-        <TextField
-          className="text-white "
-          id="standard-basic"
-          variant="standard"
-          onChange={(e)=>{
-            search(e.target.value)
-          }}
-        />
-      </Header>
-      <main>
-        <SearchResult searchResult={searchResult}/>
-      </main>
+      <Header>.</Header>
+      <div className="px-6">
+        <PlaylistTrackProvider>
+          <main className="mb-4 overflow-y-auto hover:overflow-y-scroll h-80">
+            <MyPlaylistTable />
+          </main>
+          <section className="mt-3">
+            <h1 className="mb-2 text-2xl font-bold">플레이스트에 추가할 곡을 찾아보세요</h1>
+            <input
+                className="px-2 mb-3 text-white"
+                placeholder="search"
+                onChange={(e) => {
+                  search(e.target.value);
+                }}
+              />
+            <SearchResult searchResult={searchResult} />
+          </section>
+        </PlaylistTrackProvider>
+      </div>
     </div>
   );
 };

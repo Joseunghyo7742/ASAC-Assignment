@@ -15,7 +15,7 @@
     "ecmaFeatures": { "jsx": true },
     "ecmaVersion": "latest",
     "sourceType": "module",
-    "project": "./tsconfig.json"
+    "project": "./tsconfig.json",
   },
   "root": true,
   "plugins": ["@typescript-eslint", "react", "simple-import-sort"],
@@ -23,5 +23,5 @@
     "react/react-in-jsx-scope": "off",
     "react/prop-types": 0,
     "react-hooks/rules-of-hooks": "off"
-  }
+  },
 }
