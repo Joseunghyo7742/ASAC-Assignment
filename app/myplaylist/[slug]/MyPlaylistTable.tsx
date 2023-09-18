@@ -31,7 +31,11 @@ const MyPlaylistTable = () => {
       console.log("couldn't update Playlist", e);
     }
   }
-
+ // useTryCatchAPI(
+  //   setDoc(doc(firebaseDB, 'playlists', `${slug}`), {
+  //     playlistName: playlistName,
+  //     tracks: playlistTracks,
+  //   })
   return (
     <article>
       <div className="flex items-center gap-2 mb-3">

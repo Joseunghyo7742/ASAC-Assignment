@@ -10,33 +10,41 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Button from '@/components/Button';
 
+async function getPlaylists(): Promise<any[]> {
+  try {
+    //? 더 괜찮은 방식이 없을까? 한번에 collection 내의 문서를 담고 싶다.
+    const userPlaylists = await getDocs(collection(firebaseDB, 'playlists'));
+    const playlistData = [];
+    userPlaylists.forEach((playlist) => {
+      playlistData.push({ id: playlist.id, data: playlist.data() });
+    });
+    console.log(playlistData);
+    return playlistData;
+  } catch (e) {
+    console.log('Fail to get user playlists in the library ', e);
+    return [];
+  }
+}
+
 const Library = () => {
   const router = useRouter();
-  //꼭 state로 관리를 해줘야 하는지.
   const [playlists, setPlaylists] = useState([]);
+
+  const useGetPlaylists = () => {
+    getPlaylists().then((result) => {
+      setPlaylists(result);
+    });
+  };
   useEffect(() => {
-    async function getPlaylists() {
-      try {
-        //? 더 괜찮은 방식이 없을까? 한번에 collection 내의 문서를 담고 싶다.
-        const userPlaylists = await getDocs(collection(firebaseDB, 'playlists'));
-        const playlistData = [];
-        userPlaylists.forEach((playlist) => {
-          playlistData.push({id:playlist.id,data:playlist.data()});
-        });
-        setPlaylists(playlistData);
-        console.log(playlistData)
-      } catch (e) {
-        console.log('Fail to get user playlists in the library ', e);
-      }
-    }
-    console.log("playlist rendered")
-    getPlaylists();
+    console.log('playlist rendered');
+    useGetPlaylists();
   }, []);
+  //slug 
   //createPlaylist() 넣으면 무한생성
   //playlist를 의존성배열에 넣으면 무한 렌더를한다..
   //안넣으면 바로 반영이 안됨.
 
-  //TODO: Create후 바로 반영되도록. 
+  //TODO: Create후 바로 반영되도록.
   async function createPlaylist() {
     try {
       console.log('createPlaylist');
@@ -46,17 +54,20 @@ const Library = () => {
       });
       console.log('Document written with ID:', docRef.id);
       //? 코드리뷰 받고 싶은 곳.
+
+      useGetPlaylists();
       router.push(`/myplaylist/${docRef.id}`);
     } catch (e) {
       console.error('error adding document', e);
     }
   }
   async function deletePlaylist(targetId) {
-    console.log("delete function", targetId)
+    console.log('delete function', targetId);
     try {
       await deleteDoc(doc(firebaseDB, 'playlists', `${targetId}`));
-      //!이게 최선의 방식일까 
-      setPlaylists(prevPlaylists => prevPlaylists.filter(playlist => playlist.id !== targetId));
+      //!이게 최선의 방식일까
+      // setPlaylists((prevPlaylists) => prevPlaylists.filter((playlist) => playlist.id !== targetId));
+      useGetPlaylists();
     } catch (e) {
       console.error("couldn't delete", e);
     }

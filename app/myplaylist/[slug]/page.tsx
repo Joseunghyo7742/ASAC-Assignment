@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import Header from '@/components/Header';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -7,7 +7,6 @@ import { PlaylistTrackProvider } from '@/app/myplaylist/[slug]/PlaylistTrackProv
 import MyPlaylistTable from '@/app/myplaylist/[slug]/MyPlaylistTable';
 
 const page = ({ params }: { params: { slug: string } }) => {
-  
   const [searchResult, setSearchResult] = useState(null);
   const [accessToken, setAccessToken] = useState('');
 
@@ -28,7 +27,8 @@ const page = ({ params }: { params: { slug: string } }) => {
         setAccessToken(data.access_token);
       })
       .catch((error) => console.log("Couldn't get Token", error));
-  }, [CLIENT_ID, CLIENT_SECRET]);
+  }, []);
+  //바뀌지않는 값을 ependencyㅔ 너흘 필요가 없다. 여기가 오히려 context
 
   //search
   async function search(searchInput) {
