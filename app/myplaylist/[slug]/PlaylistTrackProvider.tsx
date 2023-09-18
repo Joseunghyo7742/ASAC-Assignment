@@ -25,7 +25,7 @@ export const PlaylistTrackProvider = ({ children, playlistSlug }) => {
       }
     }
     getCurrentPlaylist();
-  }, [playlistSlug]);
+  }, []);
 
   return (
     <PlaylistInfoContext.Provider value={{ playlistTracks, setPlaylistTracks,playlistName, setPlaylistName }}>

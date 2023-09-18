@@ -29,9 +29,14 @@ const Library = () => {
         console.log('Fail to get user playlists in the library ', e);
       }
     }
+    console.log("playlist rendered")
     getPlaylists();
   }, []);
+  //createPlaylist() 넣으면 무한생성
+  //playlist를 의존성배열에 넣으면 무한 렌더를한다..
+  //안넣으면 바로 반영이 안됨.
 
+  //TODO: Create후 바로 반영되도록. 
   async function createPlaylist() {
     try {
       console.log('createPlaylist');
