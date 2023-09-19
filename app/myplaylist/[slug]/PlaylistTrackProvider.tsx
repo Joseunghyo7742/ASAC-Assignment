@@ -1,25 +1,27 @@
 'use client';
 import { createContext, useContext, useEffect, useState } from 'react';
+
 import { doc, getDoc } from 'firebase/firestore';
+
 import firebaseDB from '@/app/firebase/firebasedb';
 
 export const PlaylistInfoContext = createContext(null);
 export const PlaylistSlugContext = createContext(null);
 
 export const PlaylistTrackProvider = ({ children, playlistSlug }) => {
-  const slug  = playlistSlug;
-  console.log('slug in Provider',slug);
+  const slug = playlistSlug;
+  console.log('slug in Provider', slug);
 
   const [playlistTracks, setPlaylistTracks] = useState([]);
-  const [playlistName, setPlaylistName]= useState("");
+  const [playlistName, setPlaylistName] = useState('');
   useEffect(() => {
     async function getCurrentPlaylist() {
       try {
-        //단일 문서 불러오기온 후 전역 변수에 넣어주기 
+        //단일 문서 불러오기온 후 전역 변수에 넣어주기
         const playlistInfo = (await getDoc(doc(firebaseDB, 'playlists', `${slug}`))).data();
-        console.log("get Current playlist", playlistInfo)
-        setPlaylistTracks(playlistInfo.tracks)
-        setPlaylistName(playlistInfo.playlistName)
+        console.log('get Current playlist', playlistInfo);
+        setPlaylistTracks(playlistInfo.tracks);
+        setPlaylistName(playlistInfo.playlistName);
       } catch (e) {
         console.log('Error getting current playlist');
       }
@@ -28,7 +30,9 @@ export const PlaylistTrackProvider = ({ children, playlistSlug }) => {
   }, []);
 
   return (
-    <PlaylistInfoContext.Provider value={{ playlistTracks, setPlaylistTracks,playlistName, setPlaylistName }}>
+    <PlaylistInfoContext.Provider
+      value={{ playlistTracks, setPlaylistTracks, playlistName, setPlaylistName }}
+    >
       <PlaylistSlugContext.Provider value={slug}>{children}</PlaylistSlugContext.Provider>
     </PlaylistInfoContext.Provider>
   );
