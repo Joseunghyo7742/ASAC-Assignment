@@ -1,13 +1,15 @@
 'use client';
 
-import { TbPlaylist } from 'react-icons/tb';
-import { AiOutlinePlus } from 'react-icons/ai';
-import { doc, addDoc, collection, getDocs, deleteDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
-import firebaseDB from '@/app/firebase/firebasedb';
-import { useRouter } from 'next/navigation';
+
+import { doc, addDoc, collection, getDocs, deleteDoc } from 'firebase/firestore';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { AiOutlinePlus } from 'react-icons/ai';
+import { TbPlaylist } from 'react-icons/tb';
+
+import firebaseDB from '@/app/firebase/firebasedb';
 import Button from '@/components/Button';
 
 async function getPlaylists(): Promise<any[]> {
@@ -39,10 +41,6 @@ const Library = () => {
     console.log('playlist rendered');
     useGetPlaylists();
   }, []);
-  //slug 
-  //createPlaylist() 넣으면 무한생성
-  //playlist를 의존성배열에 넣으면 무한 렌더를한다..
-  //안넣으면 바로 반영이 안됨.
 
   //TODO: Create후 바로 반영되도록.
   async function createPlaylist() {

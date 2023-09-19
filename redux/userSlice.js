@@ -11,13 +11,17 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     setToken: (state, action) => {
-      state.CLIENT_ID = action.payload.CLIENT_ID;
-      state.CLIENT_SECRET = action.payload.CLIENT_SECRET;
-      state.ACCESS_TOKEN = action.payload.ACCESS_TOKEN;
+      return {
+        ...state,
+        CLIENT_ID: action.payload.CLIENT_ID,
+        CLIENT_SECRET: action.payload.CLIENT_SECRET,
+        ACCESS_TOKEN: action.payload.ACCESS_TOKEN,
+      };
+      //새로운 상태 객체를 반환하도록 코드를 작성해야 한다.
     },
   },
 });
 
 export const { setToken } = userSlice.actions;
 
-
+export default userSlice;

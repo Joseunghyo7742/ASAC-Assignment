@@ -1,5 +1,6 @@
 //parent component로부터 props로 데이터를 넘겨받자.
 import Image from 'next/image';
+
 import  * as PlaylistTrackProvider from '@/app/myplaylist/[slug]/PlaylistTrackProvider';
 //TODO: 타입 내부에 적기.
 

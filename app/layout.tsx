@@ -1,11 +1,9 @@
+'use client';
 import { Figtree } from 'next/font/google';
-import { Provider } from 'react-redux';
-import { persistStore } from 'redux-persist';
-import { PersistGate } from 'redux-persist/integration/react';
 
 import { ModalProvider } from '@/components/ModalProvider';
 import Sidebar from '@/components/Sidebar';
-import store from '@/lib/store/index';
+import ReduxProvider from '@/redux/provider';
 
 import './globals.css';
 import type { Metadata } from 'next';
@@ -23,13 +21,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={font.className}>
-        <Provider store={store}>
-          <PersistGate loading={null} persistor={persistStore(store)}>
-            <ModalProvider>
-              <Sidebar>{children}</Sidebar>
-            </ModalProvider>
-          </PersistGate>
-        </Provider>
+        <ReduxProvider>
+          <ModalProvider>
+            <Sidebar>{children}</Sidebar>
+          </ModalProvider>
+        </ReduxProvider>
       </body>
     </html>
   );

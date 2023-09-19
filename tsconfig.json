@@ -46,7 +46,7 @@
     // "noImplicitReturns": true,             /* 함수에서 코드의 모든 경로가 값을 반환하지 않을 시 에러보고 여부 */
     "noFallthroughCasesInSwitch": true /* switch문에서 fallthrough 케이스에 대한 에러보고 여부 */,
     /* 모듈 해석 옵션 */
-    "moduleResolution": "bundler" /* 모듈 해석 방법 설정: 'node' (Node.js) 혹은 'classic' (TypeScript pre-1.6). */,
+    "moduleResolution": "Bundler" /* 모듈 해석 방법 설정: 'node' (Node.js) 혹은 'classic' (TypeScript pre-1.6). */,
     // "baseUrl": "./",                       /* non-absolute한 모듈 이름을 처리할 기준 디렉토리 */
     "paths": {
       "@/*": ["./*"]
@@ -83,7 +83,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "mocks/handlers.js",
-    "components/PlayList.tsx", "lib/store/userSlice.js",
+    "components/PlayList.tsx",
+    "redux/store/userSlice.js"
   ],
   /* "files" 와 "include" 모두 지정되어 있지 않다면 컴파일러는 기본적으로 "exclude" 속성을 사용하여 제외된 것은 제외하고 모든 TypeScript (.ts,.d.ts 그리고 .tsx) 파일을 포함하는 디렉토리와 하위 디렉토리에 포함 */
   "exclude": ["node_modules"]

@@ -2,11 +2,14 @@
 import { useState } from 'react';
 
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 import SearchResult from '@/app/myplaylist/[slug]/SearchResult';
 
 const Search = () => {
   const [searchResult, setSearchResult] = useState(null);
+  //React toolkit read access_token
+  const accessToken = useSelector((state) => (state.userReducer.user.ACCESS_TOKEN));
 
   async function search(searchInput) {
     try {

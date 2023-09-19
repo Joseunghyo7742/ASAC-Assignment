@@ -1,10 +1,13 @@
 'use client';
+import { useEffect } from 'react';
+
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 import { FieldErrors, SubmitHandler, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
 import { useModalDispatch, useModalState } from '@/components/ModalProvider';
-import { setToken } from '@/lib/store/userSlice';
+import { setToken } from '@/redux/userSlice';
 
 interface FormData {
   userEmail: string;
@@ -16,18 +19,32 @@ const testUser = {
 };
 
 const page = () => {
+  const router = useRouter();
+  const Authdispatch = useDispatch();
   const dispatch = useModalDispatch();
   const state = useModalState();
   const { register, handleSubmit } = useForm<FormData>();
   const CLIENT_ID = process.env.NEXT_PUBLIC_SP_CLIENT_ID;
   const CLIENT_SECRET = process.env.NEXT_PUBLIC_SP_CLIENT_SECRET;
 
+  useEffect(() => {
+    console.log('rendered in login page');
+  });
+  const authdispatch = (token) => {
+    Authdispatch(
+      setToken({
+        CLIENT_ID: CLIENT_ID,
+        CLIENT_SECRET: CLIENT_SECRET,
+        ACCESS_TOKEN: token,
+      }),
+    );
+    console.log('dispatch setToken');
+  };
   //Form 제출시 실행되는 함수.
   const onSubmit: SubmitHandler<FormData> = (data) => {
     if (data.userEmail === testUser.id && data.userPassword === testUser.password) {
       console.log('log in success!');
 
-      const dispatch = useDispatch();
       //access token 요청
       axios({
         method: 'post',
@@ -39,14 +56,8 @@ const page = () => {
       })
         .then((response) => {
           const data = response.data;
-          dispatch(
-            setToken({
-              CLIENT_ID: CLIENT_ID,
-              CLIENT_SECRENT: CLIENT_SECRET,
-              ACCESS_TOKEN: data.access_token,
-            }),
-          );
-          console.log('dispatch setToken');
+          authdispatch(data.access_token);
+          router.push(`/`);
         })
         .catch((error) => console.log("Couldn't get Token", error));
     } else {
@@ -70,7 +81,7 @@ const page = () => {
   };
   return (
     <div className="flex items-center justify-center w-full h-full ">
-      <div className=" w-[40%]  flex flex-col items-center gap-3 px-3 py-4 rounded-md bg-neutral-900">
+      <div className=" w-min-[40%]  flex flex-col items-center gap-3 px-3 py-4 rounded-md bg-neutral-900">
         <h1 className="text-2xl font-bold">Log in</h1>
         <form
           className="flex flex-col w-full gap-1 px-20 "

@@ -1,8 +1,10 @@
 /* eslint-disable react/display-name */
 'use client';
 
-import { IoMdClose } from 'react-icons/io';
 import { ForwardedRef, forwardRef } from 'react';
+
+import { IoMdClose } from 'react-icons/io';
+
 import { useModalState } from './ModalProvider';
 
 const Modal = forwardRef((_, ref: ForwardedRef<HTMLDialogElement>) => {

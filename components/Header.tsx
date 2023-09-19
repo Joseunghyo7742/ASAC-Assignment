@@ -1,13 +1,14 @@
 'use client';
 
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { twMerge } from 'tailwind-merge';
+import { BiSearch } from 'react-icons/bi';
+import { HiHome } from 'react-icons/hi';
 import { RxCaretLeft } from 'react-icons/rx';
 import { RxCaretRight } from 'react-icons/rx';
-import { HiHome } from 'react-icons/hi';
-import { BiSearch } from 'react-icons/bi';
+import { twMerge } from 'tailwind-merge';
+
 import Button from './Button';
-import Link from 'next/link';
 
 interface HeaderProps {
   children: React.ReactNode;
@@ -62,7 +63,7 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
             </div>
             <div>
               <Button onClick={() => {}} className="px-6 py-2 bg-white">
-                <Link href="/sign-up"> Log in</Link>
+                <Link href="/log-in"> Log in</Link>
               </Button>
             </div>
           </>
